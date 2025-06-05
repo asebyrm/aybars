@@ -1,0 +1,7 @@
+{
+    "mode": "LIVE",
+    "serial_port": "cu.debug-console",
+    "baud_rate": 115200,
+    "refresh_rate_ms": 500,
+    "log_enabled": true
+}

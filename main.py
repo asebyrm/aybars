@@ -1,16 +1,21 @@
-# This is a sample Python script.
+from PyQt5.QtWidgets import QApplication
+from gui.main_window import MainWindow
+from core.telemetry_manager import TelemetryManager
+from data.simulator import SimulatedTelemetry
+from services.serial_service import SerialTelemetry
+from utils.config_loader import load_config
+import sys
 
-# Press ⌃R to execute it or replace it with your code.
-# Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
+cfg = load_config()
+mode = cfg.get('mode', 'SIMULATION')
 
+if mode == 'SIMULATION':
+    source = SimulatedTelemetry()
+else:
+    source = SerialTelemetry(cfg['serial_port'], cfg['baud_rate'])
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press ⌘F8 to toggle the breakpoint.
-
-
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+app = QApplication(sys.argv)
+tm = TelemetryManager(source)
+window = MainWindow(tm)
+window.show()
+sys.exit(app.exec_())
